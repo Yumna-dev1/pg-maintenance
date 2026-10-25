@@ -33,7 +33,9 @@ export default async function handler(req, res) {
       body: new URLSearchParams({ From: from, To: to, Body: body }),
     }).then((r) => r.json())
 
-  const sms = await send(process.env.TWILIO_SMS_FROM, phone)
+    const sms = process.env.TWILIO_SMS_FROM
+    ? await send(process.env.TWILIO_SMS_FROM, phone)
+    : { message: 'SMS not set up yet' }
   const wa = await send('whatsapp:' + process.env.TWILIO_WA_FROM, 'whatsapp:' + phone)
 
   res.status(200).json({ sms: sms.status || sms.message, whatsapp: wa.status || wa.message })
