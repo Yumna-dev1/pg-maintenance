@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../supabaseClient'
+import { notifyTenant } from '../notify'
 
 export default function CoordinatorDashboard() {
   const [complaints, setComplaints] = useState([])
@@ -18,6 +19,8 @@ export default function CoordinatorDashboard() {
 
   const updateStatus = async (id, status) => {
     await supabase.from('complaints').update({ status }).eq('id', id)
+        notifyTenant(id)
+    load()
     load()
   }
 

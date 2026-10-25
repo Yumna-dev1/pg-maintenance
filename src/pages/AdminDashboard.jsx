@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../supabaseClient'
+import { notifyTenant } from '../notify'
 
 export default function AdminDashboard() {
   const [complaints, setComplaints] = useState([])
@@ -31,6 +32,8 @@ export default function AdminDashboard() {
       .from('complaints')
       .update({ assigned_to: coordinatorId, status: 'Assigned' })
       .eq('id', id)
+          notifyTenant(id)
+    load()
     load()
   }
 
