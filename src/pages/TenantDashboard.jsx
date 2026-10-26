@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../supabaseClient'
+import PayMaintenance from '../components/PayMaintenance'
 
 export default function TenantDashboard() {
   const [complaints, setComplaints] = useState([])
@@ -57,6 +58,7 @@ export default function TenantDashboard() {
     <div style={{ maxWidth: 600, margin: '30px auto', padding: 10 }}>
       <h2>Tenant Dashboard</h2>
       <button onClick={logout}>Logout</button>
+            <PayMaintenance />
 
       <form onSubmit={submit} style={{ display: 'grid', gap: 10, margin: '20px 0' }}>
         <h3>Raise a complaint</h3>
