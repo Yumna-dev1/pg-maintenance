@@ -38,5 +38,5 @@ export default async function handler(req, res) {
     : { message: 'SMS not set up yet' }
   const wa = await send('whatsapp:' + process.env.TWILIO_WA_FROM, 'whatsapp:' + phone)
 
-  res.status(200).json({ sms: sms.status || sms.message, whatsapp: wa.status || wa.message })
+    res.status(200).json({ sms: sms.message || sms.status, whatsapp: wa.message || wa.status, code: wa.code })
 }
