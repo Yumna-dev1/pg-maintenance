@@ -1,13 +1,15 @@
-import { supabase } from './supabaseClient'
-
-export async function notifyTenant(complaintId) {
-  const { data: { session } } = await supabase.auth.getSession()
-  fetch('/api/notify', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${session.access_token}`,
-    },
-    body: JSON.stringify({ complaintId }),
-  })
-}
+  const sms = c.status === 'Resolved'
+    ? await fetch('https://www.fast2sms.com/dev/bulkV2', {
+        method: 'POST',
+        headers: {
+          authorization: process.env.FAST2SMS_KEY,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          route: 'q',
+          message: body,
+          numbers: phone.slice(-10),
+          flash: 0,
+        }),
+      }).then((r) => r.json())
+    : { message: 'SMS is sent only when Resolved' }
