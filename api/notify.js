@@ -36,7 +36,15 @@ export default async function handler(req, res) {
     const sms = process.env.TWILIO_SMS_FROM
     ? await send(process.env.TWILIO_SMS_FROM, phone)
     : { message: 'SMS not set up yet' }
-  const wa = await send('whatsapp:' + process.env.TWILIO_WA_FROM, 'whatsapp:' + phone)
-
+    const wa = await fetch(`https://api.twilio.com/2010-04-01/Accounts/${process.env.TWILIO_SID}/Messages.json`, {
+    method: 'POST',
+    headers: { Authorization: auth, 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({
+      From: 'whatsapp:' + process.env.TWILIO_WA_FROM,
+      To: 'whatsapp:' + phone,
+      ContentSid: 'HXb5b62575e6e4ff6129ad7c8efe1f983e',
+      ContentVariables: JSON.stringify({ 1: `${c.category} complaint`, 2: c.status }),
+    }),
+  }).then((r) => r.json())
     res.status(200).json({ sms: sms.message || sms.status, whatsapp: wa.message || wa.status, code: wa.code })
 }
