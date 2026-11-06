@@ -53,6 +53,20 @@ export default function AdminDashboard() {
     <div style={{ maxWidth: 700, margin: '30px auto', padding: 10 }}>
       <h2>Admin Dashboard</h2>
       <button onClick={logout}>Logout</button>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(110px, 1fr))', gap: 12, margin: '20px 0' }}>
+        {[
+          ['Total', complaints.length],
+          ['Open', complaints.filter((c) => c.status === 'Open').length],
+          ['Assigned', complaints.filter((c) => c.status === 'Assigned').length],
+          ['In Progress', complaints.filter((c) => c.status === 'In Progress').length],
+          ['Resolved', complaints.filter((c) => c.status === 'Resolved').length],
+        ].map(([label, count]) => (
+          <div key={label} style={{ border: '1px solid #ddd', textAlign: 'center' }}>
+            <div style={{ fontSize: '2rem', fontWeight: 600 }}>{count}</div>
+            <small>{label}</small>
+          </div>
+        ))}
+      </div>
 
       <div style={{ display: 'flex', gap: 10, margin: '20px 0' }}>
         <input
