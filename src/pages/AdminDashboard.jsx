@@ -74,7 +74,7 @@ export default function AdminDashboard() {
           placeholder="Search by room, name, category..."
           onChange={(e) => setSearch(e.target.value)}
         />
-        <select onChange={(e) => setStatusFilter(e.target.value)}>
+                <select style={{ width: 'auto', minWidth: 140 }} onChange={(e) => setStatusFilter(e.target.value)}>
           <option>All</option>
           <option>Open</option>
           <option>Assigned</option>

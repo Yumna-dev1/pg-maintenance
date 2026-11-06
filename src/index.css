@@ -173,3 +173,12 @@ img {
 }
 
 ::selection { background: var(--blush); }
+/* search bar row on the admin page */
+div[style*="display: flex"] select {
+  width: auto;
+  min-width: 140px;
+}
+
+div[style*="display: flex"] input {
+  min-width: 0;
+}
