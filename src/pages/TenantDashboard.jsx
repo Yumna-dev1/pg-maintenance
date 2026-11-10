@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { supabase } from '../supabaseClient'
 import PayMaintenance from '../components/PayMaintenance'
-
+import FeedbackBox from '../components/FeedbackBox'
 export default function TenantDashboard() {
   const [complaints, setComplaints] = useState([])
   const [category, setCategory] = useState('Plumbing')
@@ -10,6 +10,7 @@ export default function TenantDashboard() {
   const [photo, setPhoto] = useState(null)
   const [msg, setMsg] = useState('')
   const navigate = useNavigate()
+    const [feedbacks, setFeedbacks] = useState({})
 
   const load = async () => {
     const { data } = await supabase
@@ -17,6 +18,8 @@ export default function TenantDashboard() {
       .select('*')
       .order('created_at', { ascending: false })
     setComplaints(data || [])
+        const { data: fb } = await supabase.from('feedback').select('*')
+    setFeedbacks(Object.fromEntries((fb || []).map((f) => [f.complaint_id, f])))
   }
 
   useEffect(() => { load() }, [])
@@ -82,6 +85,9 @@ export default function TenantDashboard() {
           <b>{c.category}</b> - <i>{c.status}</i>
           <p>{c.description}</p>
           {c.photo_url && <img src={c.photo_url} alt="complaint" width="150" />}
+                    {c.status === 'Resolved' && (
+            <FeedbackBox complaintId={c.id} existing={feedbacks[c.id]} onDone={load} />
+          )}
           <small>{new Date(c.created_at).toLocaleString()}</small>
         </div>
       ))}

@@ -9,6 +9,7 @@ export default function AdminDashboard() {
   const [search, setSearch] = useState('')
   const [statusFilter, setStatusFilter] = useState('All')
   const navigate = useNavigate()
+    const [feedbacks, setFeedbacks] = useState({})
 
   const load = async () => {
     const { data } = await supabase
@@ -16,6 +17,8 @@ export default function AdminDashboard() {
       .select('*, tenant:profiles!complaints_tenant_id_fkey(full_name, room_no)')
       .order('created_at', { ascending: false })
     setComplaints(data || [])
+        const { data: fb } = await supabase.from('feedback').select('*')
+    setFeedbacks(Object.fromEntries((fb || []).map((f) => [f.complaint_id, f])))
 
     const { data: coords } = await supabase
       .from('profiles')
@@ -92,6 +95,12 @@ export default function AdminDashboard() {
           </p>
           <p>{c.description}</p>
           {c.photo_url && <img src={c.photo_url} alt="complaint" width="150" />}
+                    {feedbacks[c.id] && (
+            <p style={{ color: '#c9a24d' }}>
+              {'★'.repeat(feedbacks[c.id].rating)}{'☆'.repeat(5 - feedbacks[c.id].rating)}{' '}
+              <small>{feedbacks[c.id].comment}</small>
+            </p>
+          )}
           <div>
             <select
               value={c.assigned_to || ''}
